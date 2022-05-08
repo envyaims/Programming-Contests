@@ -6,4 +6,4 @@ for(auto contest: contests){
 }
 ```
 
-## My Past Contests Log!
+## My Past Contests Log
