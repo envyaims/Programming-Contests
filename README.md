@@ -6,4 +6,4 @@ for(auto contest: contests){
 }
 ```
 
-[My Past Contests Log](https://github.com/envyaims/Programming-Contests/blob/main/CONTEST_LOG.md)
+## My Past Contests Log!
