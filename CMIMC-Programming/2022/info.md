@@ -1,6 +1,6 @@
 Team: Sleeping in Cereal 2 - Jesse Choe, Daniel Qiu, Me
 
-Honorable Placements i guess:
+###Honorable Placements i guess:###
 
 Ikea problem 5th place
 
