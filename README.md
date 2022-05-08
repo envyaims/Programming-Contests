@@ -5,5 +5,3 @@ for(auto contest: contests){
     contest[team_name] = pointer++;
 }
 ```
-
-## My Past Contests Log
