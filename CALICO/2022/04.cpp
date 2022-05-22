@@ -63,26 +63,6 @@ void solve() {
 			print(n,m,i,grid[i].find(s), true, len);
 			return;
 		}
-		if(grid[i].find(rev) != string::npos){
-			print(n,m,i,grid[i].find(rev), true, len);
-			return;
-		}
-	}
-	
-	vector<string> vert(m);
-	for(int i = 0; i < m; i++){
-		string cur = "";
-		for(int j = 0; j < n; j++){
-			cur += grid[i][j];
-		}
-		if(cur.find(s) != string::npos){
-			print(n,m,cur.find(s),i,false,len);
-			return;
-		}
-		if(cur.find(rev) != string::npos){
-			print(n,m,cur.find(rev),i,false,len);
-			return;
-		}
 	}
 	
 }
