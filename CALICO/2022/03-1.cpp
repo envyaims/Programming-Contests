@@ -29,9 +29,6 @@ void solve() {
 	for(int i = 103; i < 200; i++){
 		dp[i] = dp[i-1] + dp[i-2] + dp[i-3];
 	}
-	for(int i = 99; i >= 0; i--){
-		dp[i] = dp[i+3] - dp[i+2] - dp[i+1];
-	}
 	int t; cin >> t;
 	while(t--){
 		int x; cin >> x;
