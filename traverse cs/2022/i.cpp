@@ -2,7 +2,7 @@
 using namespace std;
 using ll = long long;
 main() {
-	ios_base::sync_with_stdio(false);cin.tie(0);
+	cin.tie(0) -> sync_with_stdio(0);
 	ll N, M, Q; cin >> N >> M >> Q;
 	vector<ll> add(N);
 	for(ll & i : add) cin >> i;
@@ -65,19 +65,27 @@ main() {
 		}
 		roar_dists[i] = dists;
 	}
+	vector<ll> max_req(N, 1e18);
+	for(ll i = 0; i < N; i++) {
+		ll ans = 0;
+		for(ll b = 50; b >= 0; b--) {
+			ll tmp = ans + (1ll<<b);
+			bool cond = true;
+			for(ll j = 0; j < N; j++) {
+				if(dists.back()[j]==1e18) continue;
+				if(roar_dists[i][j]+tmp>=dists.back()[j]+tot) cond = false;
+			}
+			if(cond == true) ans = tmp;
+		}
+		max_req[i] = ans;
+	}
 	ll ans = -1;
 	ll idx = 0;
 	while(Q--) {
 		idx++;
 		ll C, K; cin >> C >> K;
 		if(ans!=-1) continue;
-		C--;
-		bool cond = true;
-		for(ll i = 0; i < N; i++) {
-			if(dists.back()[i]==1e18) continue;
-			if(roar_dists[C][i]+K>=dists.back()[i]+tot) cond = false;
-		}
-		if(cond) ans = idx;
+		if(K<=max_req[C-1]) ans = idx;
 	}
 	cout << ans << endl;
 }
