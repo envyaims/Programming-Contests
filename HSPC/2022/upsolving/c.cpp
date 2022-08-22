@@ -1,98 +1,87 @@
-#ifndef LOCAL
+// cum is the only solution
+
 #include <bits/stdc++.h>
+#ifndef LOCAL
 #define debug(...) 0
 #else
-#include "/Users/envyaims/Documents/template/stdc++.h"
-#include "/Users/envyaims/Documents/template/debug.cpp"
+#include "../template/debug.cpp"
 #endif
 
 using namespace std;
-#define F first
-#define S second
+using ll = int_fast64_t;
 #define all(x) x.begin(), x.end()
-using ll = long long;
-template<class T> using minpq = priority_queue<T, vector<T>, greater<T>>;
-template<class T> bool ckmin(T& a, const T& b){return b<a?a=b,1:0;}
-template<class T> bool ckmax(T& a, const T& b){return a<b?a=b,1:0;}
+#define sz(x) (int)x.size()
 
+void ckmin(ll& a, ll b){
+	a = min(a, b);
+}
 
-void solve(){
-	int n,m,t; 
-	cin >> n >> m >> t;
-	vector<vector<int>> grid(m,vector<int>(n));
+int main(){
+	cin.tie(0) -> sync_with_stdio(0);
+	int n,m,t; cin >> n >> m >> t;
+	vector<vector<int>> time(m, vector<int>(n));
 	for(int i = 0; i < m; i++){
 		for(int j = 0; j < n; j++){
-			cin >> grid[i][j];
+			cin >> time[i][j];
 		}
 	}
 	
+	vector<vector<ll>> totaltime(m, vector<ll>(1 << n));
+	vector<vector<ll>> totalpen(m, vector<ll>(1 << n));
 	
-	vector<int> bruh;
-	
-	int max_problems = 0; 
-	ll min_pen = 1e18;
-	
-	auto cs = [&](pair<int,int> a, pair<int,int> b){
-		return grid[a.F][a.S] < grid[b.F][b.S];
-	};
-	
-	auto upd = [&](int problems, ll pen){
-		if(problems > max_problems){
-			max_problems = problems;
-			min_pen = pen;
-		}
-		else if(problems == max_problems){
-			min_pen = min(min_pen,pen);
-		}
-	};
-	
-	auto check = [&](){
-		vector<int> pen(m);
-		vector<pair<int,int>> probbytime;
-		for(int i = 0; i < n; i++){
-			probbytime.push_back({bruh[i],i});
-		}
-		sort(all(probbytime),cs);
-		ll curpen = 0;
-		for(int i = 0; i < n; i++){
-			int member = probbytime[i].F, probno = probbytime[i].S;
-			int cost = grid[member][probno];
-			if(pen[member] + cost > t){
-				upd(i,curpen);
-				return;
-			}
-			pen[member] += cost;
-			curpen += pen[member];
-		}
-		upd(n,curpen);
-		
-	};
-	
-	auto rec = [&](auto self){
-		if(bruh.size() == n){
-			check();
-			return;
-		}
+	// precompute penalty and time
+	for(int mask = 0; mask < (1 << n); mask++){
 		for(int i = 0; i < m; i++){
-			bruh.push_back(i);
-			self(self);
-			bruh.pop_back();
+			vector<ll> T;
+			ll sum = 0;
+			for(int j = 0; j < n; j++){
+				if(mask & (1 << j)){
+					sum += time[i][j];
+					T.push_back(time[i][j]);
+				}
+			}
+			ll pen = 0;
+			sort(all(T));
+			reverse(all(T));
+			for(int j = 0; j < sz(T); j++){
+				pen += (j + 1) * T[j];
+			}
+			totaltime[i][mask] = sum;
+			totalpen[i][mask] = pen;
 		}
-	};
-	
-	rec(rec);
-	
-	cout << max_problems << " " << min_pen << "\n";
-	
-}
-
-signed main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	int t = 1;
-	//cin>>t;
-	while(t--){
-		solve();
 	}
+	
+	vector<vector<ll>> dp(m, vector<ll>(1 << n, 1e18));
+	// dp[member][problem mask] = min pen
+	for(int i = 0; i < (1 << n); i++){
+		if(totaltime[0][i] < t){
+			dp[0][i] = totalpen[0][i];
+		}
+	}
+	
+	for(int i = 1; i < m; i++){
+		for(int mask = 0; mask < (1 << n); mask++){
+			for(int subset = mask; true; subset = (subset - 1) & mask){
+				int solve = (~subset) & mask;
+				if(totaltime[i][solve] <= t){
+					ckmin(dp[i][mask], dp[i-1][subset] + totalpen[i][solve]);
+				}
+				if(subset == 0) break;
+			}
+		}
+	}
+	
+	int maxsolve = 0;
+	ll minpen = 1e18;
+	for(int mask = 0; mask < (1 << n); mask++){
+		int solve = __builtin_popcount(mask);
+		if(solve > maxsolve && dp[m-1][mask] != 1e18){
+			maxsolve = solve;
+			minpen = dp[m-1][mask];
+		}
+		else if(solve == maxsolve && dp[m-1][mask] < minpen){
+			minpen = dp[m-1][mask];
+		}
+	}
+	cout << maxsolve << " " << minpen << endl;
 }
-
