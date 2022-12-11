@@ -1,1 +1,2 @@
 Virginia Tech High School Programming Contest
+Teams up to 3 people but 1 computer
