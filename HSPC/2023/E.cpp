@@ -67,49 +67,49 @@ void add_disjunction(int a, bool na, int b, bool nb) {
 }
 
 void uwu(){
-		int m;
-		cin >> m;
-		map<string,int> mp;
-		string alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		for(int i=0;i<52;i++) {
-			mp[alpha.substr(i,1)] = i;
-		}
-		for(int i=0;i<m;i++) {
-			string s;
+	int m;
+	cin >> m;
+	map<string,int> mp;
+	string alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	for(int i=0;i<52;i++) {
+		mp[alpha.substr(i,1)] = i;
+	}
+	for(int i=0;i<m;i++) {
+		string s;
+		cin >> s;
+		if(s=="not") {
 			cin >> s;
-			if(s=="not") {
-				cin >> s;
-				string s2; cin >> s2;
+			string s2; cin >> s2;
+			cin >> s2;
+			if(s2=="not") {
 				cin >> s2;
-				if(s2=="not") {
-					cin >> s2;
-					int x = mp[s]; int y = mp[s2];
-					add_disjunction(x,0,y,0);
-				} else {
-					assert(0);
-				}
+				int x = mp[s]; int y = mp[s2];
+				add_disjunction(x,0,y,0);
 			} else {
-				string s2; cin >> s2;
+				assert(0);
+			}
+		} else {
+			string s2; cin >> s2;
+			cin >> s2;
+			if(s2=="not") {
 				cin >> s2;
-				if(s2=="not") {
-					cin >> s2;
-					int x = mp[s]; int y = mp[s2];
-					add_disjunction(x,1,y,0);
-				} else {
-					int x = mp[s]; int y = mp[s2];
-					add_disjunction(x,1,y,1);
-				}
+				int x = mp[s]; int y = mp[s2];
+				add_disjunction(x,1,y,0);
+			} else {
+				int x = mp[s]; int y = mp[s2];
+				add_disjunction(x,1,y,1);
 			}
 		}
-		if(solve_2SAT()){
-			for (int i=0; i<52; i++){
-				if(assignment[i]) cout << alpha[i];
-			}
-			cout << endl;
+	}
+	if(solve_2SAT()){
+		for (int i=0; i<52; i++){
+			if(assignment[i]) cout << alpha[i];
 		}
-		else{
-			cout << "IMPOSSIBLE" << endl;
-		}
+		cout << endl;
+	}
+	else{
+		cout << "IMPOSSIBLE" << endl;
+	}
 		
 }
 
