@@ -126,17 +126,6 @@ struct matrix {
 vector<vector<matrix<ll, 5, 5>>> mats,mats2,mats3;
 int n,m,x,y;
 
-string to_str(ll x){
-    string s;
-    while(x){
-        s += char(x % 10 + '0');
-        x /= 10;
-    }
-    if(s.size() == 0) s = "0";
-    reverse(all(s));
-    return s;
-}
-
 void solve(){
 	cin >> n >> m >> x >> y;
 	mats.resize(n);
